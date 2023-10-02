@@ -2,23 +2,124 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Layout from '../layouts/BlogPost.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
-		<Header title={SITE_TITLE} />
-		<main>
-			<h1>🚀 Hi there, I'm Danilo!</h1>
-			<p>
-			   Welcome to my blog.
-			   Writing and breaking code, trying to document the journey
-			</p>
-		</main>
-		<Footer />
+<Layout
+	title="About Me"
+	description="Get to know me"
+>
+	<p>
+	 I'm a fullstack developer from 🇦🇷, currently traveling the world
+	 so I'm not fixed on a particular place.
+	 I earned my degree in Systems Engineering from Universidad Tecnologica Nacional.
+	 I work as software engineer at 
+	 <a 
+	  target="_blank" 
+   rel="noopener noreferrer"
+	href="https://www.leniolabs.com/"
+   >
+		LenioLabs
+	 </a>. My typical day is a mix frontend development and AI research.
+	</p>
+
+	<p>
+	 I'm passionate about technology, playing with new tools and 
+	 open source. I created several projects that were born out of my 
+	 curiosity and eagerness to learn. Neovim is my IDE of choice, a companion in my
+	 daily coding adventures❤️
+	</p>
+	<p>
+
+	 My skills include frontend and backend software development, so I can build
+	 basically anything from scratch and if I can not, I will learn how to.
+	 I'm continually trying to be a better engineer,  driven by the ambition to create impactful solutions.
+	 I also love animals, playing the guitar and being outdoors🏔️🏖️
+	</p>
+
+	<h5>Featured Projects</h5>
+	<p>
+		<b>SalvaPatas</b>
+		<br/>
+	  Currently developing a mobile app aimed at streamlining the process of rehoming abandoned pets. It's a blend of Next.js, Prisma, with a dash of ChatGPT.
+	</p>
+	<p>
+
+		<b>Zona Segura</b>
+		<br/>
+	  A mobile app enabling users to report and visualize city-wide incidents, enhancing community awareness regarding safety. This venture honed my skills in React Native, Node.js, geolocation, and AWS.
+
+	</p>
+	<p>
+	 <a 
+	  target="_blank" 
+   rel="noopener noreferrer"
+	href="https://optimizer-pl-io.web.app/home"
+   >
+   <b>Non Linear Optimizer</b>
+	 </a>
+		<br/>
+	  A tool designed for solving complex non-linear problems, with a focus on gradient optimization. Crafted with a heart full of React ❤️⚛️.
+	</p>
+	<p>
+		<b>Wikipedia Telegram Bot</b>
+		<br/>
+	  Born out of my incessant curiosity, this bot automates my frequent data lookups using Python, tapping into Wikipedia, and delivered via Telegram.
+	</p>
+	<p>
+		<b>LLM data retrieval from Neo4J DB</b>
+		<br/>
+	  Envisioning autonomous agents capable of fetching information from a graph database to interact with users. When faced with inadequate data, these agents are designed to solicit additional information, which is then translated into graph schemas to augment the AI’s knowledge base.
+	</p>
+	<h5>Experience</h5>
+	<p><b>Software engineer - LenioLabs (2021 - Present):</b>
+	 Working for ICE Technologies client, building microfrontend architectures app and active contributing
+	 to Artificial Intelligence projects and researchs.
+	</p>
+	<p><b>Software Developer - 42Mate (2020 - 2021):</b>
+	 Worked for History Channel, migrating and improving their previous content site with Drupal (I know, but I said I can learn anything, right?) React and
+	 MySQL.
+	</p>
+	<p><b>IT Admin - Corralon Casia (2017 - 2018):</b>
+	 Worked as the IT guy for the Warehouse. Was in charge of the database and I automated the 
+	 sales process using Python.
+	</p>
+
+	<h5>Talks</h5>
+	 <a 
+	  target="_blank" 
+   rel="noopener noreferrer"
+   href="https://www.facebook.com/watch/live/?extid=WA-UNK-UNK-UNK-IOS_GK0T-GK1C&mibextid=afzh1R&ref=watch_permalink&v=284661967371394"
+   >
+   <b>Introduction to AI and LLMs</b>
+	 </a>
+: I talked about AI and Large Language models in the context of education for my formal high school.
+<p>
+
+	<h5>Skills</h5>
+	<ul>
+		<li>Javascript</li>
+		<li>Python</li>
+		<li>PHP</li>
+		<li>C</li>
+		<li>Rust</li>
+		<li>CSS</li>
+		<li>HTML</li>
+		<li>MySQL</li>
+		<li>PostgreSQL</li>
+		<li>MongoDB</li>
+		<li>AWS</li>
+		<li>Jenkins</li>
+		<li>Docker</li>
+	</ul>
+
+</p>
+</Layout>
 	</body>
 </html>
