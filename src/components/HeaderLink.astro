@@ -7,12 +7,15 @@ const { href, class: className, ...props } = Astro.props;
 
 const { pathname } = Astro.url;
 const isActive = href === pathname || href === pathname.replace(/\/$/, '');
+const shouldDisplayMobile = href === "/contact"
 ---
 
 <a href={href} class:list={['border-2 dark:border-[#fff] border-slate-900 rounded-[20px] p-2 dark:text-[#FFFFFF]', 
    { 'bg-[#006D5B40]': isActive,
    'bg-transparent': !isActive,
    'dark:bg-[#F1FAEE2E]': isActive,
+   'hidden': shouldDisplayMobile,
+   'lg:block': shouldDisplayMobile
    }]} {...props}>
 	<slot />
 </a>
