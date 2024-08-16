@@ -2,10 +2,10 @@
 // Define the work experiences as an array of objects
 const experiences = [
 { year: "2021 - Present", title: "Software Engineer - LenioLabs", description: 
-"Orchestrated the coding, testing, and deployment of a micro-frontends architecture for the eFolder app, managing integration across over 12 repositories and facilitating collaboration among multiple teams. This foundational architecture supported the rapid scaling of the application to thousands of users globally. Led the development of an enhanced user interface for the Renderer app, achieving notable gains in performance and user experience that signicantly boosted user satisfaction and engagement. As the project lead for the eFolder application, I mentored new team members, ensuring efective onboarding and seamless knowledge transfer. I contributed to open-source projects and led internal AI research initiatives, enhancing the company’s prole in AI and driving the adoption of innovative AI solutions. This role involved synthesizing insights from recent research, implementing ndings, and developing proofs of concept that attracted additional clients. Currently leading the development of an LLM that interacts with APIs, focusing on automating tasks and improving system interoperability, alongside spearheading the Vocale product, aimed at revolutionizing user interactions through voice recognition technology."
+'<ul class="pl-4 text-lg text-justify font-normal text-gray-700 dark:text-[#FEFCFD]"><li class="list-disc">Orchestrated the coding, testing, and deployment of a micro-frontends architecture for the Renderer app, managing integration across over 12 repositories and facilitating collaboration among multiple teams. </li><li class="list-disc"> As the project lead for the eFolder application, I mentored new team members, ensuring efective onboarding and seamless knowledge transfer. </li><li</li><li class="list-disc">I contributed to open-source projects and led internal AI research initiatives, enhancing the company’s prole in AI and driving the adoption of innovative AI solutions. This role involved synthesizing insights from recent research, implementing ndings, and developing proofs of concept that attracted additional clients.</li><li class="list-disc"> Currently leading the development of an LLM that interacts with APIs, focusing on automating tasks and improving system interoperability, alongside spearheading the Vocale product, aimed at revolutionizing user interactions through voice recognition technology.</li></ul>'
 },
-  { year: "2020 - 2021", title: "Software Developer - 42Mate", description: "Developed and optimized the full-stack architecture of the History Channel website, utilizing technologies such as JavaScript, ReactJS, PHP, and Drupal to enhance efficiency and user experience. I also implemented an automated migration system using Bash scripts, achieving a signicant reduction in the page administrator’s workload from three days to nearly immediate, thereby maximizing productivity and reducing operational costs." },
-  { year: "2017 - 2018", title: "IT Admin - Corralón Casia", description: "Worked as the IT guy for the Warehouse. Was in charge of the database and I automated the sales process using Python." }
+{ year: "2020 - 2021", title: "Software Developer - 42Mate", description: '<ul class="pl-4 text-lg text-justify font-normal text-gray-700 dark:text-[#FEFCFD]"><li class="list-disc">Developed and optimized the full-stack architecture of the History Channel website, utilizing technologies such as JavaScript, ReactJS, PHP, and Drupal to enhance efficiency and user experience.</li><li class="list-disc"> Implemented an automated migration system using Bash scripts, achieving a signicant reduction in the page administrator’s workload from three days to nearly immediate, thereby maximizing productivity and reducing operational costs.</li></ul>' },
+{ year: "2017 - 2018", title: "IT Admin - Corralón Casia", description: '<p class="pl-4 text-lg text-justify font-normal text-gray-700 dark:text-[#FEFCFD]"> Worked as the IT guy for the Warehouse. Was in charge of the database and I automated the sales process using Python. </p>' }
 ];
 ---
 
@@ -15,8 +15,8 @@ const experiences = [
       <div class="mb-8 ml-4">
         <div class="absolute w-6 h-6 bg-slate-900 border-4 border-[#006D5B] rounded-full -left-3.5"></div>
         <h3 class="text-2xl font-semibold ml-2 mb-2">{experience.title}</h3>
-        <time class="block mb-4 text-xl font-normal ml-2 leading-none text-gray-400">{experience.year}</time>
-        <p class="text-lg text-justify font-normal text-gray-700 ml-2 dark:text-[#FEFCFD]">{experience.description}</p>
+        <time class="block mb-4 text-xl font-normal ml-2 leading-none text-gray-400 dark:text-gray-300">{experience.year}</time>
+        <Fragment class="border-2" set:html={experience.description} />
       </div>
     </Fragment>
   ))}
