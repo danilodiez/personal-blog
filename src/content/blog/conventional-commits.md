@@ -1,6 +1,6 @@
 ---
 title: 'Conventional Commits'
-description: 'Organize project git commits in a human readable way'
+description: 'Organize project git commits in a human readable way.'
 pubDate: 'May 8 2023'
 heroImage: '/conventional-commits.png'
 ---

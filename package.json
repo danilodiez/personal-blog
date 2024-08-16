@@ -11,9 +11,18 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^1.1.0",
+    "@astrojs/react": "^3.6.2",
     "@astrojs/rss": "^3.0.0",
     "@astrojs/sitemap": "^3.0.0",
+    "@astrojs/tailwind": "^5.1.0",
     "@astrojs/vercel": "^5.0.1",
-    "astro": "^3.2.0"
+    "@fontsource-variable/dm-sans": "^5.0.6",
+    "@fontsource/dm-sans": "^5.0.21",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "astro": "^3.2.0",
+    "react": "^19.0.0-beta",
+    "react-dom": "^19.0.0-beta",
+    "tailwindcss": "^3.0.24"
   }
 }

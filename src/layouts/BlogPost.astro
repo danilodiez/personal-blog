@@ -4,6 +4,8 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import '@fontsource/dm-sans';
+
 
 type Props = CollectionEntry<'blog'>['data'];
 
@@ -54,13 +56,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		</style>
 	</head>
 
-	<body>
+<body class="relative dark:bg-[#090909] dark:text-[#FEFCFD]">
 		<Header />
-		<main>
+		<main class="pt-48">
 			<article>
-				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
-				</div>
 				<div class="prose">
 					<div class="title">
 						<div class="date">
@@ -73,7 +72,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 								)
 							}
 						</div>
-						<h1>{title}</h1>
+						<h1 class="font-bold text-3xl">{title}</h1>
 						<hr />
 					</div>
 					<slot />

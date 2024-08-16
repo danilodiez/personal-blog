@@ -1,35 +1,145 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import { Image } from 'astro:assets';
+import salvapatas from '../images/salvapatas.png'
+import zonasegura from '../images/zonasegura.png'
+
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import Layout from '../layouts/Layout.astro'
+import Timeline from '../components/Timeline.astro'
+import Languages from '../components/Languages.astro'
 ---
 
 <!doctype html>
 <html lang="en">
-	<script
-		async
-		src="http://localhost:8000/assistant-script.js?siteId=e0dc6f84-5d9c-43cb-b575-2c830f4ba5ea"
-  	></script>
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
-		<Header title={SITE_TITLE} />
-		<main>
-			<h1>🚀 Hi there, I'm Danilo!</h1>
-			<p>
-			   Welcome to my blog.
-			   Writing and breaking code, trying to document the journey
-			</p>
-			<form>
+	<Layout
+		title="Danilo Diez"
+		description="Get to know me"
+	 >
+			<Header title={SITE_TITLE} />
+			<main class="relative pt-48">
+				<div class="flex flex-col gap-y-3 mb-4">
 
-	   			<label for="name">Name (4 to 8 characters):</label>
-	
-<input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10" />
+				<h1 class="text-5xl font-semibold">Hi Everyone!</h1>
+				<h2 class="text-2xl font-semibold">
+					Let me tell you a little about me 
+				</h2>
+				</div>
+				<section>
 
-			</form>
-		</main>
-		<Footer />
-	</body>
+	<p class="text-justify">
+	 I'm a fullstack developer from 🇦🇷, currently traveling the world
+	 so I'm not fixed on a particular place.
+	 I earned my degree in Systems Engineering from Universidad Tecnologica Nacional.
+	 I work as software engineer at 
+	 <a 
+	  target="_blank" 
+   rel="noopener noreferrer"
+	href="https://www.leniolabs.com/"
+ class="underline"
+   >
+		LenioLabs.
+	 </a> My typical day is a mix frontend development and AI research.
+	</p>
+	<br/>
+
+	<p>
+	 I'm passionate about technology, playing with new tools and 
+	 open source. I created several projects that were born out of my 
+	 curiosity and eagerness to learn. Neovim is my IDE of choice, a companion in my
+	 daily coding adventures❤️
+	</p>
+	<br />
+	<p>
+
+	 My skills include frontend and backend software development, so I can build
+	 basically anything from scratch and if I can not, I will learn how to.
+	 I'm continually trying to be a better engineer,  driven by the ambition to create impactful solutions.
+	 I also love animals, playing the guitar and being outdoors🏔️🏖️
+	</p>
+
+
+	<h1 class="text-5xl font-semibold mt-12 mb-4">Experience</h1>
+	<Timeline client:load />
+	<h1 class="text-5xl font-semibold mt-12 mb-4">Skills</h1>
+	<Languages />
+	<h1 class="text-5xl font-semibold mt-12 mb-4">Featured Projects</h1>
+		<div class="flex items-center">
+
+			<div>
+		<a
+
+	  target="_blank" 
+   rel="noopener noreferrer"
+	href="https://salvapatas.app/"
+ class="underline font-bold"
+	  >SalvaPatas</a>
+		<br/>
+	  Currently developing a mobile/web app to improve the street pets rescue process in Argentina. 
+	  Built with Next.js and PostgreSQL.
+
+			</div>
+
+		<Image src={salvapatas} alt="salvapatas app mobile preview" width={400} class="hidden md:block"/>
+
+		</div>
+
+		<div class="flex items-center">
+
+		<Image src={zonasegura} alt="zona segura app mobile preview" width={300} class="hidden md:block"/>
+			<div>
+		<a class="font-bold">Zona Segura</a>
+		<br/>
+	  A mobile app enabling users to report and visualize city-wide incidents, enhancing community awareness regarding safety. This venture honed my skills in React Native, Node.js, geolocation, and AWS.
+
+			</div>
+
+
+		</div>
+
+	<p class="mt-8">
+	 <a 
+	  target="_blank" 
+   rel="noopener noreferrer"
+	href="https://optimizer-pl-io.web.app/home"
+ class="font-bold underline"
+   >
+   <b>Non Linear Optimizer</b>
+	 </a>
+		<br/>
+	  A tool designed for solving complex non-linear problems, with a focus on gradient optimization. Crafted with a heart full of React ❤️⚛️.
+	</p>
+
+	<p class="mt-8">
+		<b>Wikipedia Telegram Bot</b>
+		<br/>
+	  Born out of my incessant curiosity, this bot automates my frequent data lookups using Python, tapping into Wikipedia, and delivered via Telegram.
+	</p>
+	<p class="mt-8">
+		<b>LLM data retrieval from Neo4J DB</b>
+		<br/>
+	  Envisioning autonomous agents capable of fetching information from a graph database to interact with users. When faced with inadequate data, these agents are designed to solicit additional information, which is then translated into graph schemas to augment the AI’s knowledge base.
+	</p>
+	<h1 class="text-5xl font-semibold mt-12 mb-4">Talks</h1>
+	 <a 
+	  target="_blank" 
+   rel="noopener noreferrer"
+   href="https://www.facebook.com/watch/live/?extid=WA-UNK-UNK-UNK-IOS_GK0T-GK1C&mibextid=afzh1R&ref=watch_permalink&v=284661967371394"
+   >
+   <b>Introduction to AI and LLMs</b>
+	 </a>
+: I talked about AI and Large Language models in the context of education for my formal high school.
+<p>
+
+</p>
+				</section>
+			</main>
+
+			<Footer />
+	</Layout>
 </html>
