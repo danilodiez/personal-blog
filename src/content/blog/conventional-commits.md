@@ -13,7 +13,6 @@ This document/workshop/tutorial was created to standardize and structure the com
 
 #### Basic Concepts
 
-## Paragraph
 [Conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) is a specification that provides a lightweight framework for maintaining, organizing, and standardizing project git commits. It provides a set of easy rules to maintain a clean and explicit history of commits and changes. By following the Conventional Commits specification, developers can create a more organized and transparent repository, which can improve collaboration, code quality, and project management.
 
 The provided structure by Conventional commits has the next shape:
