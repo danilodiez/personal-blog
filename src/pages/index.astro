@@ -10,12 +10,15 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import Layout from '../layouts/Layout.astro'
 import Timeline from '../components/Timeline.astro'
 import Languages from '../components/Languages.astro'
+import { ViewTransitions } from 'astro:transitions';
+
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<ViewTransitions />
 	</head>
 	<Layout
 		title="Danilo Diez"
