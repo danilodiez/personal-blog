@@ -1,0 +1,38 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { getCollection } from 'astro:content';
+
+const hobbies = (await getCollection('hobbies')).sort((a, b) => a.data.order - b.data.order);
+
+
+---
+<SiteLayout page="hobbies" title="Hobbies — Danilo Diez">
+
+  <div class="section-header">
+    <p class="section-eyebrow">Hobbies</p>
+    <h1 class="section-title">Fuera del teclado.</h1>
+    <p class="section-lead">
+      Tengo muchos interesés y de algunos, hago una obsesión. Las cosas que me mantienen cuerdo.</p>
+  </div>
+
+  <div class="masonry">
+    {hobbies.map((hobby) => {
+      const h = hobby.data;
+      return (
+        <a href={`/hobbies/${hobby.slug}`} class={`card${!h.image ? ' card-text-only' : ''}`}>
+          {h.image && <img class={`card-img ${h.imageSize}`} src={h.image} alt={h.title} loading="lazy" />}
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-section" style={`color:${h.sectionColor}`}>{h.section}</span>
+              {h.subsection && <><span class="card-dot" style={`background:${h.sectionColor}`}></span><span class="card-subsection">{h.subsection}</span></>}
+            </div>
+            <div class="card-title">{h.title}</div>
+            {h.desc && <div class="card-desc">{h.desc}</div>}
+            {h.stage && <div class="card-tags"><span class="stage-pill">{h.stage}</span></div>}
+          </div>
+        </a>
+      );
+    })}
+  </div>
+
+</SiteLayout>

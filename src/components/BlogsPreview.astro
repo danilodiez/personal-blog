@@ -1,0 +1,122 @@
+---
+export interface Post {
+  title: string;
+  date: string;
+  excerpt: string;
+  url: string;
+  category?: string;
+}
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="blogs-preview">
+  {posts.map((post) => (
+    <a class="blog-card" href={post.url} target={post.url.startsWith('/') ? '_self' : '_blank'} rel={post.url.startsWith('/') ? undefined : 'noopener noreferrer'}>
+      <div class="blog-card-header">
+        <span class="blog-card-label">Escritura · {post.category ?? 'Blog'}</span>
+        <span class="blog-card-arrow">↗</span>
+      </div>
+      <div class="blog-card-body">
+        <h2 class="blog-card-title">{post.title}</h2>
+        <p class="blog-card-date">{post.date}</p>
+        <p class="blog-card-excerpt">{post.excerpt}</p>
+      </div>
+    </a>
+  ))}
+</div>
+
+<style>
+  .blogs-preview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--hover-bg);
+    padding: 1.5rem 1.75rem 2rem;
+    text-decoration: none;
+    color: inherit;
+    min-height: 340px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: background 0.15s ease, border-color 0.15s ease,
+                transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .blog-card:hover {
+    background: var(--accent-subtle);
+    border-color: var(--accent-muted);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+  .blog-card:hover .blog-card-title { color: var(--accent-text); }
+
+  .blog-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: auto;
+  }
+
+  .blog-card-label {
+    font-family: var(--font);
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    text-transform: none;
+  }
+
+  .blog-card-arrow {
+    font-size: 22px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .blog-card-body {
+    margin-top: 3.5rem;
+  }
+
+  .blog-card-title {
+    font-family: var(--font);
+    font-size: 2.8rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+    transition: color 0.15s ease;
+  }
+
+  .blog-card-date {
+    font-family: var(--font);
+    font-size: 18px;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-card-excerpt {
+    font-family: var(--font);
+    font-size: 19px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (max-width: 600px) {
+    .blogs-preview {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

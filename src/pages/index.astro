@@ -1,164 +1,173 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import { Image } from 'astro:assets';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { getCollection } from 'astro:content';
 
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import Layout from '../layouts/Layout.astro'
-import Timeline from '../components/Timeline.astro'
-import Languages from '../components/Languages.astro'
-import { ViewTransitions } from 'astro:transitions';
+const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const allHobbies  = (await getCollection('hobbies')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const allPosts    = (await getCollection('posts')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
 
+const stageLabel = { seed: '🌱 semilla', growing: '🌿 creciendo', evergreen: '🌲 perenne' };
+const stageCls   = { seed: 'seed',       growing: 'growing',       evergreen: 'evergreen' };
 ---
+<SiteLayout page="home">
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<Layout
-		title="Danilo Diez"
-		description="Get to know me"
-	 >
-			<Header title={SITE_TITLE} />
-			<main class="relative pt-48 text-base">
-				<div class="flex flex-col gap-y-3 mb-4">
+  <div class="home-grid">
 
-				<h1 class="text-2xl md:text-3xl font-semibold">Hi everyone!</h1>
-				<h2 class="text-xl font-semibold">
-					Let me tell you a little about me 
-				</h2>
-				</div>
-				<section>
+    <!-- Intro -->
+    <div class="intro">
+      <p>
+        Hola, soy <strong>Danilo 🧉</strong> Soy ingeniero de software de 🇦🇷 Corrientes, Argentina.
+        Trabajo en <a href="https://webflow.com" target="_blank">Webflow</a> construyendo productos de web y de IA,
+        y cofundé <a href="https://somoscool.com" target="_blank">Cool Studio</a>.
+      </p>
+      <p>
+        En mi <a href="/hobbies">tiempo libre</a> estudio filosofía, <a href="https://www.ieserh.com.ar/" target="_blank">enseño a programar</a>, toco la guitarra,
+        hago trekking, cocino, leo
+        y <a href="/escritura">escribo</a> — aunque no tan consistentemente como quisiera.
+      </p>
+    </div>
 
-	<p class="text-justify">
-	 I'm a fullstack developer from 🇦🇷🧉.
-	 <br/>
-	 I earned my degree in Systems Engineering from Universidad Tecnologica Nacional.
-	 I work as software engineer at 
-	 <a 
-	  target="_blank" 
-   rel="noopener noreferrer"
-	href="https://www.leniolabs.com/"
- class="underline"
-   >
-		LenioLabs.
-	 </a> My typical day is a mix of web development and AI research.
-	</p>
-	<br/>
+    <!-- Projects -->
+    {allProjects.map(({ data: p }) => (
+      p.url ? (
+        <a class="home-card" href={p.url} target="_blank" rel="noopener">
+          <div class="home-card-header">
+            <span class="home-card-label" style={`color:${p.sectionColor}`}>{p.section} · {p.subsection}</span>
+            <span class="home-card-arrow">↗</span>
+          </div>
+          {p.image && <img src={p.image} alt={p.title} loading="lazy" />}
+          <div class="home-card-body">
+            <div class="home-card-title">{p.title}</div>
+            {p.desc && <div class="home-card-desc">{p.desc}</div>}
+            {p.tags.length > 0 && (
+              <div class="home-card-tags">
+                {p.tags.slice(0, 3).map(tag => <span class="htag">{tag}</span>)}
+              </div>
+            )}
+          </div>
+        </a>
+      ) : (
+        <a class="home-card" href="/proyectos">
+          <div class="home-card-header">
+            <span class="home-card-label" style={`color:${p.sectionColor}`}>{p.section} · {p.subsection}</span>
+          </div>
+          {p.image && <img src={p.image} alt={p.title} loading="lazy" />}
+          <div class="home-card-body">
+            <div class="home-card-title">{p.title}</div>
+            {p.desc && <div class="home-card-desc">{p.desc}</div>}
+          </div>
+        </a>
+      )
+    ))}
 
-	<p>
-	 I'm passionate about technology, playing with new tools and 
-	 open source. I created several projects that were born out of my 
-	 curiosity and eagerness to learn. I use Neovim BTW, a companion for my
-	 daily coding adventures.
-	</p>
-	<br />
-	<p>
+    <!-- Hobbies -->
+    {allHobbies.map(({ data: h }) => (
+      <a class="home-card" href="/hobbies">
+        <div class="home-card-header">
+          <span class="home-card-label" style={`color:${h.sectionColor}`}>{h.section} · {h.subsection}</span>
+        </div>
+        {h.image && <img src={h.image} alt={h.title} loading="lazy" />}
+        <div class={`home-card-body${!h.image ? ' home-card-body--text' : ''}`}>
+          <div class="home-card-title">{h.title}</div>
+          {h.desc && <div class="home-card-desc">{h.desc}</div>}
+          <span class={`stage-pill ${stageCls[h.stage]}`}>{stageLabel[h.stage]}</span>
+        </div>
+      </a>
+    ))}
 
-	 My skills include frontend and backend software development, so I can build
-	 basically anything from scratch and if I can not, I will learn how to.
-	 I'm continually trying to be a better engineer,  driven by the ambition to create impactful solutions.
-	 I also love animals, playing the guitar and being outdoors.
-	</p>
+    <!-- Posts -->
+    {allPosts.map(({ data: p }) => (
+      <a class="home-card" href={p.url ?? '/escritura'} target={p.url?.startsWith('http') ? '_blank' : undefined} rel={p.url?.startsWith('http') ? 'noopener' : undefined}>
+        <div class="home-card-header">
+          <span class="home-card-label" style="color:var(--c-write)">Escritura · {p.category}</span>
+          <span class="home-card-arrow">↗</span>
+        </div>
+        <div class="home-card-body home-card-body--text">
+          <div class="home-card-title">{p.title}</div>
+          <div class="home-card-desc">{p.excerpt}</div>
+        </div>
+      </a>
+    ))}
 
+  </div>
 
-	<h1 class="text-2xl md:text-3xl font-semibold mt-12 mb-4">Experience</h1>
-	<Timeline />
-	<h1 class="text-2xl md:text-3xl font-semibold mt-12 mb-4">Skills</h1>
-	<Languages />
-	<h1 class="text-2xl md:text-3xl font-semibold mt-12 mb-4">Featured Projects</h1>
-		<div class="flex items-center">
+</SiteLayout>
 
-			<div>
-		<span
+<style>
+  .intro {
+    break-inside: avoid;
+    margin-bottom: 10px;
+    padding: 0.25rem 0 1.5rem;
+  }
+  .intro p {
+    font-family: var(--font);
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro strong { font-weight: 400; }
+  .intro a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border); }
+  .intro a:hover { text-decoration-color: var(--muted); }
 
- class="font-bold"
-	  >SalvaPatas</span>
-		<br/>
-	  Currently developing a mobile/web app to improve the street pets rescue process in Argentina. 
-	  Built with Next.js and PostgreSQL.
-	  <br />
-		<a
+  .home-grid { columns: 3; column-gap: 10px; }
+  @media (max-width: 860px) { .home-grid { columns: 2; } }
+  @media (max-width: 540px) { .home-grid { columns: 1; } }
 
-	  target="_blank" 
-   rel="noopener noreferrer"
-	href="https://salvapatas.app/"
-class="underline font-bold"
-	  >Link to SalvaPatas</a>
+  .home-card {
+    break-inside: avoid;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--hover-bg);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.15s ease, border-color 0.15s ease,
+                transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .home-card:hover {
+    background: var(--accent-subtle);
+    border-color: var(--accent-muted);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+  .home-card:hover .home-card-title { color: var(--accent-text); }
 
-			</div>
-		</div>
+  .home-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0.875rem 0.5rem;
+  }
+  .home-card-label { font-family: var(--font); font-size: 16px; letter-spacing: 0.04em; }
+  .home-card-arrow { font-size: 21px; color: var(--muted); flex-shrink: 0; }
 
-		<div class="flex items-center mt-8">
+  .home-card img { width: 100%; display: block; object-fit: cover; }
 
-			<div>
-		<a class="font-bold">Zona Segura</a>
-		<br/>
-	  A mobile app enabling users to report and visualize city-wide incidents, enhancing community awareness regarding safety. This venture honed my skills in React Native, Node.js, geolocation, and AWS.
+  .home-card-body {
+    padding: 0.75rem 0.875rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .home-card-body--text { padding-top: 0.25rem; min-height: 80px; }
 
-			</div>
+  .home-card-title {
+    font-family: var(--font);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--text);
+    transition: color 0.15s ease;
+  }
+  .home-card-desc { font-size: 18px; color: var(--muted); line-height: 1.6; }
 
-
-		</div>
-
-	<p class="mt-8">
-	 <span
- class="font-bold"
-   >
-	Non Linear Optimizer
-	 </span>
-		<br/>
-	  A tool designed for solving complex non-linear problems, with a focus on gradient optimization. Crafted with a heart full of React ❤️⚛️.
-		</br>
-
-	 <a 
-	  target="_blank" 
-   rel="noopener noreferrer"
-	href="https://optimizer-pl-io.web.app/home"
- class="font-bold underline"
-   >
-	Link to the project 
-	 </a>
-	</p>
-
-
-	<p class="mt-8">
-		<b>Wikipedia Telegram Bot</b>
-		<br/>
-	  Born out of my incessant curiosity, this bot automates my frequent data lookups using Python, tapping into Wikipedia, and delivered via Telegram.
-	</p>
-	<p class="mt-8">
-		<b>LLM data retrieval from Neo4J DB</b>
-		<br/>
-	  Envisioning autonomous agents capable of fetching information from a graph database to interact with users. When faced with inadequate data, these agents are designed to solicit additional information, which is then translated into graph schemas to augment the AI’s knowledge base.
-
-	  <br />
-		<a
-
-	  target="_blank" 
-   rel="noopener noreferrer"
-	href="https://salvapatas.app/"
- class="underline font-bold"
-	  >Link to the project</a>
-	</p>
-	<h1 class="text-2xl md:text-3xl font-semibold mt-12 mb-4">Talks</h1>
-	 <a 
-	  target="_blank" 
-   rel="noopener noreferrer"
-   href="https://www.facebook.com/watch/live/?extid=WA-UNK-UNK-UNK-IOS_GK0T-GK1C&mibextid=afzh1R&ref=watch_permalink&v=284661967371394"
- 	class="underline font-bold"
-   >
-   <b>Introduction to AI and LLMs</b>
-	 </a>
-- I talked about AI and Large Language models in the context of education for my formal high school.
-<p>
-
-</p>
-				</section>
-			</main>
-
-			<Footer />
-	</Layout>
-</html>
+  .home-card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .htag { font-size: 13px; padding: 2px 7px; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); }
+</style>
