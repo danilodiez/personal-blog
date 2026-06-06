@@ -1,6 +1,6 @@
 ---
 title: "Mezclando"
-desc: "Me obsesioné con la idea de hacer bailar a la gente."
+desc: "Por un tiempo me obsesioné con la idea de hacer bailar a la gente."
 section: "Música"
 imageSize: "short"
 sectionColor: "var(--c-music)"
