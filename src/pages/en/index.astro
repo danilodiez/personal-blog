@@ -1,0 +1,173 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getLocaleCollection } from '../../i18n/utils';
+
+const allProjects = (await getLocaleCollection('projects', 'en')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const allHobbies  = (await getLocaleCollection('hobbies', 'en')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const allPosts    = (await getLocaleCollection('posts', 'en')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
+
+const stageLabel = { seed: '🌱 seed', growing: '🌿 growing', evergreen: '🌲 evergreen' };
+const stageCls   = { seed: 'seed',     growing: 'growing',     evergreen: 'evergreen' };
+---
+<SiteLayout page="home" lang="en">
+
+  <div class="home-grid">
+
+    <!-- Intro -->
+    <div class="intro">
+      <p>
+        Hi, I'm <strong>Danilo 🧉</strong> I'm a software engineer from 🇦🇷 Corrientes, Argentina.
+        I work at <a href="https://webflow.com" target="_blank">Webflow</a> building web and AI products,
+        and I co-founded <a href="https://somoscool.com" target="_blank">Cool Studio</a>.
+      </p>
+      <p>
+        In my <a href="/en/hobbies">free time</a> I study philosophy, <a href="https://www.ieserh.com.ar/" target="_blank">teach programming</a>, play guitar,
+        go trekking, cook, read
+        and <a href="/en/writing">write</a>. I wish days were 30 hours long.
+      </p>
+    </div>
+
+    <!-- Projects -->
+    {allProjects.map(({ data: p }) => (
+      p.url ? (
+        <a class="home-card" href={p.url} target="_blank" rel="noopener">
+          <div class="home-card-header">
+            <span class="home-card-label" style={`color:${p.sectionColor}`}>{p.section} · {p.subsection}</span>
+            <span class="home-card-arrow">↗</span>
+          </div>
+          {p.image && <img src={p.image} alt={p.title} loading="lazy" />}
+          <div class="home-card-body">
+            <div class="home-card-title">{p.title}</div>
+            {p.desc && <div class="home-card-desc">{p.desc}</div>}
+            {p.tags.length > 0 && (
+              <div class="home-card-tags">
+                {p.tags.slice(0, 3).map(tag => <span class="htag">{tag}</span>)}
+              </div>
+            )}
+          </div>
+        </a>
+      ) : (
+        <a class="home-card" href="/en/projects">
+          <div class="home-card-header">
+            <span class="home-card-label" style={`color:${p.sectionColor}`}>{p.section} · {p.subsection}</span>
+          </div>
+          {p.image && <img src={p.image} alt={p.title} loading="lazy" />}
+          <div class="home-card-body">
+            <div class="home-card-title">{p.title}</div>
+            {p.desc && <div class="home-card-desc">{p.desc}</div>}
+          </div>
+        </a>
+      )
+    ))}
+
+    <!-- Hobbies -->
+    {allHobbies.map(({ data: h }) => (
+      <a class="home-card" href="/en/hobbies">
+        <div class="home-card-header">
+          <span class="home-card-label" style={`color:${h.sectionColor}`}>{h.section} · {h.subsection}</span>
+        </div>
+        {h.image && <img src={h.image} alt={h.title} loading="lazy" />}
+        <div class={`home-card-body${!h.image ? ' home-card-body--text' : ''}`}>
+          <div class="home-card-title">{h.title}</div>
+          {h.desc && <div class="home-card-desc">{h.desc}</div>}
+          <span class={`stage-pill ${stageCls[h.stage]}`}>{stageLabel[h.stage]}</span>
+        </div>
+      </a>
+    ))}
+
+    <!-- Posts -->
+    {allPosts.map(({ data: p }) => (
+      <a class="home-card" href={p.url ?? '/en/writing'} target={p.url?.startsWith('http') ? '_blank' : undefined} rel={p.url?.startsWith('http') ? 'noopener' : undefined}>
+        <div class="home-card-header">
+          <span class="home-card-label" style="color:var(--c-write)">Writing · {p.category}</span>
+          <span class="home-card-arrow">↗</span>
+        </div>
+        <div class="home-card-body home-card-body--text">
+          <div class="home-card-title">{p.title}</div>
+          <div class="home-card-desc">{p.excerpt}</div>
+        </div>
+      </a>
+    ))}
+
+  </div>
+
+</SiteLayout>
+
+<style>
+  .intro {
+    break-inside: avoid;
+    margin-bottom: 10px;
+    padding: 0.25rem 0 1.5rem;
+  }
+  .intro p {
+    font-family: var(--font);
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .intro p:last-child { margin-bottom: 0; }
+  .intro strong { font-weight: 400; }
+  .intro a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border); }
+  .intro a:hover { text-decoration-color: var(--muted); }
+
+  .home-grid { columns: 3; column-gap: 10px; }
+  @media (max-width: 860px) { .home-grid { columns: 2; } }
+  @media (max-width: 540px) { .home-grid { columns: 1; } }
+
+  .home-card {
+    break-inside: avoid;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--hover-bg);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.15s ease, border-color 0.15s ease,
+                transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .home-card:hover {
+    background: var(--accent-subtle);
+    border-color: var(--accent-muted);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+  .home-card:hover .home-card-title { color: var(--accent-text); }
+
+  .home-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0.875rem 0.5rem;
+  }
+  .home-card-label { font-family: var(--font); font-size: 16px; letter-spacing: 0.04em; }
+  .home-card-arrow { font-size: 21px; color: var(--muted); flex-shrink: 0; }
+
+  .home-card img { width: 100%; display: block; object-fit: cover; }
+
+  .home-card-body {
+    padding: 0.75rem 0.875rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .home-card-body--text { padding-top: 0.25rem; min-height: 80px; }
+
+  .home-card-title {
+    font-family: var(--font);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--text);
+    transition: color 0.15s ease;
+  }
+  .home-card-desc { font-size: 18px; color: var(--muted); line-height: 1.6; }
+
+  .home-card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .htag { font-size: 13px; padding: 2px 7px; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); }
+</style>

@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('hobbies');
+  const entries = (await getCollection('hobbies')).filter((e) => !e.slug.startsWith('en/'));
   return entries.map((entry) => ({ params: { slug: entry.slug } }));
 }
 

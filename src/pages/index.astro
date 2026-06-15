@@ -1,10 +1,10 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { getCollection } from 'astro:content';
+import { getLocaleCollection } from '../i18n/utils';
 
-const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
-const allHobbies  = (await getCollection('hobbies')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
-const allPosts    = (await getCollection('posts')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
+const allProjects = (await getLocaleCollection('projects', 'es')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const allHobbies  = (await getLocaleCollection('hobbies', 'es')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const allPosts    = (await getLocaleCollection('posts', 'es')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
 
 const stageLabel = { seed: '🌱 semilla', growing: '🌿 creciendo', evergreen: '🌲 perenne' };
 const stageCls   = { seed: 'seed',       growing: 'growing',       evergreen: 'evergreen' };

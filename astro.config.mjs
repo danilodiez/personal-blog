@@ -11,5 +11,12 @@ export default defineConfig({
   site: 'https://danilodiez.com',
   integrations: [mdx(), sitemap(), tailwind(), react()],
   output: "server",
-  adapter: vercel()
+  adapter: vercel(),
+  i18n: {
+    defaultLocale: 'es',
+    locales: ['es', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
 });

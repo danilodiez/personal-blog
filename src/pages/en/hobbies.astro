@@ -1,0 +1,36 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getLocaleCollection } from '../../i18n/utils';
+
+const hobbies = (await getLocaleCollection('hobbies', 'en')).sort((a, b) => a.data.order - b.data.order);
+---
+<SiteLayout page="hobbies" lang="en" title="Hobbies — Danilo Diez">
+
+  <div class="section-header">
+    <p class="section-eyebrow">Hobbies</p>
+    <h1 class="section-title">Away from the keyboard.</h1>
+    <p class="section-lead">
+      I have many interests, and some I turn into obsessions. The things that keep me sane.</p>
+  </div>
+
+  <div class="masonry">
+    {hobbies.map((hobby) => {
+      const h = hobby.data;
+      return (
+        <a href={`/en/hobbies/${hobby.routeSlug}`} class={`card${!h.image ? ' card-text-only' : ''}`}>
+          {h.image && <img class={`card-img ${h.imageSize}`} src={h.image} alt={h.title} loading="lazy" />}
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-section" style={`color:${h.sectionColor}`}>{h.section}</span>
+              {h.subsection && <><span class="card-dot" style={`background:${h.sectionColor}`}></span><span class="card-subsection">{h.subsection}</span></>}
+            </div>
+            <div class="card-title">{h.title}</div>
+            {h.desc && <div class="card-desc">{h.desc}</div>}
+            {h.stage && <div class="card-tags"><span class="stage-pill">{h.stage}</span></div>}
+          </div>
+        </a>
+      );
+    })}
+  </div>
+
+</SiteLayout>

@@ -1,8 +1,8 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import { getCollection } from 'astro:content';
+import { getLocaleCollection } from '../i18n/utils';
 
-const hobbies = (await getCollection('hobbies')).sort((a, b) => a.data.order - b.data.order);
+const hobbies = (await getLocaleCollection('hobbies', 'es')).sort((a, b) => a.data.order - b.data.order);
 
 
 ---

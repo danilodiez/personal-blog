@@ -1,0 +1,162 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { getLocaleCollection } from '../../i18n/utils';
+
+const projects = (await getLocaleCollection('projects', 'en')).sort((a, b) => a.data.order - b.data.order);
+const talks    = (await getLocaleCollection('talks', 'en')).sort((a, b) => a.data.order - b.data.order);
+---
+<SiteLayout page="proyectos" lang="en" title="Projects — Danilo Diez">
+
+  <div class="section-header">
+    <p class="section-eyebrow">Projects</p>
+    <h1 class="section-title">Things I've built.</h1>
+    <p class="section-lead">Personal projects, experiments and things born out of curiosity.
+    I learned from all of them and had fun in the process.</p>
+  </div>
+
+  <div class="proj-masonry">
+    {projects.map(({ data: p }) => {
+      const hasVisual = p.image || p.placeholder;
+      const inner = (
+        <>
+          {p.image && <img class={`card-img ${p.imageSize ?? 'short'}`} src={p.image} alt={p.title} loading="lazy" />}
+          {!p.image && p.placeholder && <div class={`card-img ${p.imageSize ?? 'short'} card-placeholder`} style={`background:${p.placeholder}`}></div>}
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-section" style={`color:${p.sectionColor}`}>{p.section}</span>
+              <span class="card-dot" style={`background:${p.sectionColor}`}></span>
+              <span class="card-subsection">{p.subsection}</span>
+            </div>
+            <div class="card-title">{p.title}</div>
+            <div class="card-desc">{p.desc}</div>
+            {p.tags.length > 0 && (
+              <div class="card-tags">
+                {p.tags.map(tag => <span class="tag">{tag}</span>)}
+              </div>
+            )}
+          </div>
+        </>
+      );
+
+      return p.url ? (
+        <a class={`card${!hasVisual ? ' card-text-only' : ''}`} href={p.url} target="_blank" rel="noopener">
+          {inner}
+        </a>
+      ) : (
+        <div class={`card${!hasVisual ? ' card-text-only' : ''}`}>
+          {inner}
+        </div>
+      );
+    })}
+  </div>
+
+  {talks.length > 0 && (
+    <>
+      <hr class="rule" style="margin-top: 2rem;" />
+      <div class="section-header" style="margin-top: 2rem; margin-bottom: 1.5rem;">
+        <p class="section-eyebrow">Talks</p>
+      </div>
+      <div class="talks-grid">
+        {talks.map(({ data: t }) => (
+          t.url ? (
+            <a class="talk-card" href={t.url} target="_blank" rel="noopener">
+              {t.image && <img class="talk-img" src={t.image} alt={t.title} loading="lazy" />}
+              {!t.image && t.placeholder && <div class="talk-img talk-placeholder" style={`background:${t.placeholder}`}></div>}
+              <div class="talk-body">
+                <p class="talk-title">{t.title}</p>
+                <p class="talk-desc">{t.desc}</p>
+                <span class="talk-meta">{t.venue} · {t.year}</span>
+              </div>
+            </a>
+          ) : (
+            <div class="talk-card">
+              {t.image && <img class="talk-img" src={t.image} alt={t.title} loading="lazy" />}
+              {!t.image && t.placeholder && <div class="talk-img talk-placeholder" style={`background:${t.placeholder}`}></div>}
+              <div class="talk-body">
+                <p class="talk-title">{t.title}</p>
+                <p class="talk-desc">{t.desc}</p>
+                <span class="talk-meta">{t.venue} · {t.year}</span>
+              </div>
+            </div>
+          )
+        ))}
+      </div>
+    </>
+  )}
+
+</SiteLayout>
+
+<style>
+  .talks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 10px;
+  }
+
+  .talk-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+  a.talk-card:hover {
+    border-color: var(--accent-muted);
+    background: var(--accent-subtle);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+  a.talk-card:hover .talk-title { color: var(--accent-text); }
+
+  .talk-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .talk-placeholder {
+    height: 200px;
+  }
+
+  .talk-body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .talk-title {
+    font-family: var(--font);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.35;
+    transition: color 0.15s;
+  }
+
+  .talk-desc {
+    font-family: var(--font);
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .talk-meta {
+    font-family: var(--font);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 600px) {
+    .talks-grid { grid-template-columns: 1fr; }
+  }
+</style>

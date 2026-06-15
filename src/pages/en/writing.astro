@@ -1,0 +1,26 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import BlogsPreview from '../../components/BlogsPreview.astro';
+import { getLocaleCollection } from '../../i18n/utils';
+
+const posts = (await getLocaleCollection('posts', 'en'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .map(p => ({
+    title: p.data.title,
+    date: p.data.date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
+    excerpt: p.data.excerpt,
+    url: p.data.url ?? `#`,
+    category: p.data.category,
+  }));
+---
+<SiteLayout page="escritura" lang="en" title="Writing — Danilo Diez">
+
+  <div class="section-header">
+    <p class="section-eyebrow">Writing</p>
+    <h1 class="section-title">Words, slowly.</h1>
+    <p class="section-lead">Essays, critiques, half-formed thoughts.</p>
+  </div>
+
+  <BlogsPreview posts={posts} sectionLabel="Writing" />
+
+</SiteLayout>

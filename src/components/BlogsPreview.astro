@@ -9,16 +9,17 @@ export interface Post {
 
 interface Props {
   posts: Post[];
+  sectionLabel?: string;
 }
 
-const { posts } = Astro.props;
+const { posts, sectionLabel = 'Escritura' } = Astro.props;
 ---
 
 <div class="blogs-preview">
   {posts.map((post) => (
     <a class="blog-card" href={post.url} target={post.url.startsWith('/') ? '_self' : '_blank'} rel={post.url.startsWith('/') ? undefined : 'noopener noreferrer'}>
       <div class="blog-card-header">
-        <span class="blog-card-label">Escritura · {post.category ?? 'Blog'}</span>
+        <span class="blog-card-label">{sectionLabel} · {post.category ?? 'Blog'}</span>
         <span class="blog-card-arrow">↗</span>
       </div>
       <div class="blog-card-body">

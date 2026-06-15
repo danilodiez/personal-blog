@@ -1,25 +1,45 @@
 ---
+import { t, type Lang } from '../i18n/ui';
+import { getLangFromUrl, getLocalePaths } from '../i18n/utils';
+
 interface Props {
   title?: string;
   description?: string;
   page?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
+  lang?: Lang;
 }
 const {
   title = 'Danilo Diez',
-  description = 'Ingeniero de software de Corrientes, Argentina. Construyo productos de IA y full-stack en Webflow y Cool Studio.',
   page = 'home',
   ogImage = '/android-chrome-512x512.png',
   ogType = 'website',
+  lang = getLangFromUrl(Astro.url.pathname),
 } = Astro.props;
+
+const tr = t(lang);
+const description = Astro.props.description ?? tr('meta.defaultDescription');
+
+// Locale-aware base path: '' for Spanish (root), '/en' for English.
+const base = lang === 'en' ? '/en' : '';
+const navItems = [
+  { key: 'home',      href: `${base}/`,           label: tr('nav.home') },
+  { key: 'proyectos', href: `${base}/${lang === 'en' ? 'projects' : 'proyectos'}`, label: tr('nav.projects') },
+  { key: 'escritura', href: `${base}/${lang === 'en' ? 'writing' : 'escritura'}`,  label: tr('nav.writing') },
+  { key: 'hobbies',   href: `${base}/hobbies`,    label: tr('nav.hobbies') },
+  { key: 'acerca',    href: `${base}/${lang === 'en' ? 'about' : 'acerca'}`,        label: tr('nav.about') },
+];
+
+const altPaths = getLocalePaths(Astro.url.pathname);
+
 const year = new Date().getFullYear();
 const siteUrl = 'https://danilodiez.com';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageUrl = new URL(ogImage, siteUrl).toString();
 ---
 <!DOCTYPE html>
-<html lang="es">
+<html lang={lang}>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +55,9 @@ const ogImageUrl = new URL(ogImage, siteUrl).toString();
 <meta property="og:image" content={ogImageUrl} />
 <meta property="og:image:alt" content={title} />
 <meta property="og:site_name" content="Danilo Diez" />
-<meta property="og:locale" content="es_AR" />
+<meta property="og:locale" content={tr('og.locale')} />
+<link rel="alternate" hreflang="es" href={new URL(altPaths.es, siteUrl).toString()} />
+<link rel="alternate" hreflang="en" href={new URL(altPaths.en, siteUrl).toString()} />
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -208,6 +230,30 @@ nav {
   transition: color 0.15s;
 }
 .nav-social a:hover { color: var(--text); }
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  color: var(--muted);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.lang-toggle:hover {
+  color: var(--accent-text);
+  background: var(--accent-subtle);
+  border-color: var(--accent-muted);
+}
 
 .theme-toggle {
   background: none;
@@ -462,6 +508,7 @@ footer {
 @media(max-width:1024px){
   .nav-links { display: none; }
   .nav-social a { display: none; }
+  .nav-social .lang-toggle { display: none; }
   .burger { display: flex; }
 }
 
@@ -481,24 +528,28 @@ footer {
   <span class="nav-logo-name">Danilo Diez</span>
 </a>
   <div class="nav-links">
-    <a href="/"           class={`nav-link${page === 'home'       ? ' active' : ''}`}>Inicio</a>
-    <a href="/proyectos"  class={`nav-link${page === 'proyectos'  ? ' active' : ''}`}>Proyectos</a>
-    <a href="/escritura"  class={`nav-link${page === 'escritura'  ? ' active' : ''}`}>Escritura</a>
-    <a href="/hobbies"    class={`nav-link${page === 'hobbies'    ? ' active' : ''}`}>Hobbies</a>
-    <a href="/acerca"     class={`nav-link${page === 'acerca'     ? ' active' : ''}`}>Acerca</a>
+    {navItems.map((item) => (
+      <a href={item.href} class={`nav-link${page === item.key ? ' active' : ''}`}>{item.label}</a>
+    ))}
   </div>
   <div class="nav-social">
     <a href="https://github.com/danilodiez"           target="_blank">GitHub</a>
     <a href="https://substack.com/@danilodiez"        target="_blank">Substack</a>
-    <a href="/resume.pdf" target="_blank" rel="noopener">CV</a>
-    <button id="burger" class="burger" aria-label="Abrir menú" aria-expanded="false">
+    <a href="/resume.pdf" target="_blank" rel="noopener">{tr('nav.cv')}</a>
+    <a class="lang-toggle"
+       href={lang === 'es' ? altPaths.en : altPaths.es}
+       aria-label={lang === 'es' ? 'Switch to English' : 'Cambiar a español'}
+       title={lang === 'es' ? 'Switch to English' : 'Cambiar a español'}>
+      {lang === 'es' ? 'ES' : 'EN'}
+    </a>
+    <button id="burger" class="burger" aria-label={tr('a11y.menu.open')} aria-expanded="false">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <line x1="3" y1="6"  x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+    <button id="theme-toggle" class="theme-toggle" aria-label={tr('a11y.theme')}>
       <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="4"/>
         <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
@@ -520,7 +571,7 @@ footer {
       <span class="nav-logo-name">Danilo Diez</span>
     </a>
     <div style="display:flex;align-items:center;gap:4px;">
-      <button id="mobile-theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+      <button id="mobile-theme-toggle" class="theme-toggle" aria-label={tr('a11y.theme')}>
         <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="4"/>
           <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
@@ -532,7 +583,7 @@ footer {
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
-      <button id="mobile-close" class="burger" aria-label="Cerrar menú">
+      <button id="mobile-close" class="burger" aria-label={tr('a11y.menu.close')}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6"  y1="6" x2="18" y2="18"/>
@@ -541,16 +592,20 @@ footer {
     </div>
   </div>
   <nav class="mobile-nav">
-    <a href="/"          class={`mobile-nav-link${page === 'home'      ? ' active' : ''}`}>Inicio</a>
-    <a href="/proyectos" class={`mobile-nav-link${page === 'proyectos' ? ' active' : ''}`}>Proyectos</a>
-    <a href="/escritura" class={`mobile-nav-link${page === 'escritura' ? ' active' : ''}`}>Escritura</a>
-    <a href="/hobbies"   class={`mobile-nav-link${page === 'hobbies'   ? ' active' : ''}`}>Hobbies</a>
-    <a href="/acerca"    class={`mobile-nav-link${page === 'acerca'    ? ' active' : ''}`}>Acerca</a>
+    {navItems.map((item) => (
+      <a href={item.href} class={`mobile-nav-link${page === item.key ? ' active' : ''}`}>{item.label}</a>
+    ))}
   </nav>
   <div class="mobile-social">
     <a href="https://github.com/danilodiez"           target="_blank" rel="noopener">GitHub</a>
     <a href="https://substack.com/@danilodiez"        target="_blank" rel="noopener">Substack</a>
     <a href="https://www.linkedin.com/in/danilodiez/" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="lang-toggle"
+       href={lang === 'es' ? altPaths.en : altPaths.es}
+       aria-label={lang === 'es' ? 'Switch to English' : 'Cambiar a español'}
+       style="font-size:16px;">
+      {lang === 'es' ? 'ES' : 'EN'}
+    </a>
   </div>
 </div>
 
@@ -564,7 +619,7 @@ footer {
   <div class="footer-inner">
 
     <div class="footer-left">
-      <p class="footer-tagline">¿Querés mantenerte al día?</p>
+      <p class="footer-tagline">{tr('footer.tagline')}</p>
       <div class="footer-socials">
         <a href="https://github.com/danilodiez" target="_blank" rel="noopener" aria-label="GitHub">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -581,13 +636,13 @@ footer {
 
     <div class="footer-nav">
       <div class="footer-nav-col">
-        <a href="/">Inicio</a>
-        <a href="/proyectos">Proyectos</a>
-        <a href="/escritura">Escritura</a>
+        <a href={navItems[0].href}>{navItems[0].label}</a>
+        <a href={navItems[1].href}>{navItems[1].label}</a>
+        <a href={navItems[2].href}>{navItems[2].label}</a>
       </div>
       <div class="footer-nav-col">
-        <a href="/hobbies">Hobbies</a>
-        <a href="/acerca">Acerca</a>
+        <a href={navItems[3].href}>{navItems[3].label}</a>
+        <a href={navItems[4].href}>{navItems[4].label}</a>
       </div>
     </div>
 

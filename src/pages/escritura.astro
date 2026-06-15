@@ -1,7 +1,7 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import BlogsPreview from '../components/BlogsPreview.astro';
-import { getCollection } from 'astro:content';
+import { getLocaleCollection } from '../i18n/utils';
 
 function decodeEntities(str: string) {
   return str
@@ -50,7 +50,7 @@ try {
   if (res.ok) substackPosts = parseRss(await res.text());
 } catch (_) {}
 
-const localPosts = (await getCollection('posts'))
+const localPosts = (await getLocaleCollection('posts', 'es'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .map(p => ({
     title: p.data.title,
